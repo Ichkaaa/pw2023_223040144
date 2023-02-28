@@ -1,6 +1,10 @@
-<?php 
-for ($x= 0; $x <= 10; $x++) {
-    for ($y = 0; $y < $x; $y++){
-    echo $y + 1 . " ";
-} echo "<br/>";
+<?php
+echo "<table>";
+for ($x = 1; $x <= 10; $x++) {
+    echo "<tr>";
+    for ($y = 1; $y <= $x; $y++) {
+        echo "<td>" . $y . "</td>";
+    }
+    echo "</tr>";
 }
+echo "</table>";
