@@ -1,3 +1,16 @@
+<?php
+session_start();
+require 'php/functions.php';
+$guestStars = query("SELECT * FROM guest_stars");
+$tiket = query("SELECT * FROM tiket");
+
+if (isset($_GET['cari'])) {
+  $keyword = $_GET['keyword'];
+  $guestStars = cariGuestStars($keyword);
+} else {
+  $guestStars = query("SELECT * FROM guest_stars");
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -34,80 +47,7 @@
       </div>
     </section>
     <!-- header hero -->
-    <!-- navbar -->
-    <nav
-      class="navbar navbar-expand-lg fixed-top navbar-light black"
-      data-bs-theme="light"
-      style="background-color: #7661a800"
-    >
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#"
-          ><img
-            src="https://anifest.org/wp-content/uploads/2022/11/logo-no-year-white-neko.png"
-            alt=""
-            class="w-75"
-        /></a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarColor01"
-          aria-controls="navbarColor01"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarColor01">
-          <ul class="navbar-nav ms-auto me-auto mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
-            </li>
-            <div class="dropdown">
-              <a
-                class="btn dropdown-toggle"
-                href="#"
-                role="button"
-                id="dropdownMenuLink"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Guest Star
-              </a>
-
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <li>
-                  <a class="dropdown-item" href="#sec1"
-                    >ABOUT ANIFEST ANIME FESTIVAL!</a
-                  >
-                </li>
-                <li><a class="dropdown-item" href="#sec2">Why We Here</a></li>
-              </ul>
-            </div>
-            <li class="nav-item">
-              <a class="nav-link" href="Schedule.html">SCHEDULE</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#GuestStar">GuestStar</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="login.html">Login</a>
-            </li>
-          </ul>
-          <form class="d-flex" role="search">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-
-            <button class="btn btn-dark tombol1" type="submit">Search</button>
-          </form>
-        </div>
-      </div>
-    </nav>
-    <!-- navbar-end -->
+   <?php include ('modular/navbar.php') ?>
 
     <!-- section event -->
     <section id="sec1" class="switchV1">
@@ -169,104 +109,73 @@
     <!-- s -->
     <!-- section whats's hot -->
 
-    <section
-      id="GuestStar"
-      class="p-3"
-      style="background-color: #524747 !important"
-    >
-      <div class="container-fluid">
-        <div class="row d-flex justify-content-between">
-          <h2 style="color: rgb(203, 45, 203)">Guest Star</h2>
+    
+<section id="GuestStar" class="p-3" style="background-color: #524747 !important">
+<div class="container-fluid">
+      <div class="row">
+      <?php foreach ($guestStars as $star) : ?>
+          <div class="col-lg-4 col-md-6 col-sm-12 mb-4 ">
+              <div class="card p-1" style="width: 20rem">
+              <img src="assets/img/<?= $star['gambar']; ?>" alt="" class="w-100" />
+          <div class="card-body">
+                <div class="card-body">
+                 
+                  <a href="php/detail1.php?id=<?= $star['guest_star_id']; ?>"><h4><?= $star['name']; ?></h4></a>
 
-          <div class="col-12 col-lg-2 col-md-6 col-sm-12 text-start">
-            <div class="card p-1 border-0" style="width: 16rem">
-              <img src="assets/img/laris.jpg" alt="" class="w-100" />
-              <div class="card-body">
-                <h4>larissa rochefort</h4>
-                <p>Cosplayer Guest Star</p>
+
+            <p>Guest Star</p>
+                  </div>
+                </div>
               </div>
-            </div>
+            </a>
           </div>
-          <div class="col-12 col-lg-2 col-md-6 col-sm-12">
-            <div class="card p-1 border-0" style="width: 16rem">
-              <img
-                src="https://c10.patreonusercontent.com/4/patreon-media/p/post/39876658/52c9b1791bb34e2aaae26484c0a4d9ce/eyJxIjoxMDAsIndlYnAiOjB9/1.jpg?token-time=1684368000&token-hash=-GuLYTjfdzEPGbbcUKTLIzZdV5fcpvtSyvV2YsrjQNk%3D"
-                alt=""
-                class="w-100"
-              />
-              <div class="card-body">
-                <h4>Lola Zieta</h4>
-                <p>Cosplayer Guest Star</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 col-lg-2 col-md-6 col-sm-12">
-            <div class="card p-1 border-0" style="width: 16rem">
-              <img src="/assets/img/puni.jpg" alt="" class="w-100" />
-              <div class="card-body">
-                <h4>Clarissa Punipun</h4>
-                <p>Cosplayer Guest Star</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 col-lg-2 col-md-6 col-sm-12">
-            <div class="card p-1 border-0" style="width: 16rem">
-              <img src="/assets/img/puni.jpg" alt="" class="w-100" />
-              <div class="card-body">
-                <h4>PUNIPUN</h4>
-                <p>Cosplayer Guest Star</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 col-lg-2 col-md-6 col-sm-12">
-            <div class="card p-1 border-0" style="width: 15rem">
-              <img src="/assets/img/puni.jpg" alt="" class="w-100" />
-              <div class="card-body">
-                <h4>PUNIPUN</h4>
-                <p>Cosplayer Guest Star</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <?php endforeach; ?>
       </div>
-    </section>
+    </div>
+</section>
+
+
+
     <!-- section whats's hot end-->
     <!-- fitur pilihan -->
     <section class="p-3 pb-4" style="background-color: #8b8686">
       <div class="container">
         <div class="row">
           <h2 class="text-center">TIKET</h2>
-          <div class="col-lg-4 position-relative">
+          <!-- <div class="col-lg-4 position-relative">
             <h4 class="text-center pt-1">VVIP</h4>
             <p class="text-center fs-3 fw-bold">RP.300.000</p>
             <img src="assets/img/vvip.png" alt="" class="w-100" />
             <div class="tombol">
-              <button class="btn btn-dark tombol1" type="submit">
-                BUY NOW
+            <button class="btn btn-dark tombol1" type="submit">
+            <a href="php/detail3.php?id=<?= $tiket['id'];?>">BUY NOW</a>
               </button>
             </div>
           </div>
           <div class="col-lg-4 position-relative">
             <h4 class="text-center pt-1">VIP</h4>
             <p class="text-center fs-3 fw-bold">RP.200.000</p>
-            <img src="/assets/img/vip.png" alt="" class="w-100" />
+            <img src="assets/img/vip.png" alt="" class="w-100" />
 
             <div class="tombol">
-              <button class="btn btn-dark tombol1" type="submit">
-                BUY NOW
+            <button class="btn btn-dark tombol1" type="submit">
+                <a href="php/detail3.php?id=<?= $tiket['id'];?>">BUY NOW</a>
               </button>
             </div>
-          </div>
-          <div class="col-lg-4 position-relative">
-            <h4 class="text-center pt-1">Standard</h4>
-            <p class="text-center fs-3 fw-bold">RP.70.000</p>
-            <img src="/assets/img/70.png" alt="" class="w-100" />
-            <div class="tombol">
-              <button class="btn btn-dark tombol1" type="submit">
-                BUY NOW
-              </button>
-            </div>
-          </div>
+          </div> -->
+          <?php foreach ($tiket as $item): ?>
+  <div class="col-lg-4 position-relative">
+    <h4 class="text-center pt-1"><?= $item['jenis']; ?></h4>
+    <p class="text-center fs-3 fw-bold">RP.<?= $item['harga']; ?></p>
+    <img src="assets/img/<?= $item['gambar']; ?>" alt="" class="w-100" />
+    <div class="tombol">
+      <button class="btn btn-dark tombol1" type="submit">
+        <a href="php/detail3.php?id=<?= $item['id']; ?>">BUY NOW</a>
+      </button>
+    </div>
+  </div>
+<?php endforeach; ?>
+
         </div>
       </div>
     </section>
@@ -382,74 +291,7 @@
     </section>
     <!-- fitur terbaik adidas -->
 
-    <!-- section about2 -->
-    <section class="footerku bg-dark">
-      <div class="container">
-        <div class="row justify-content-between">
-          <div class="col-6 col-lg-2 mb-2 py-4 ms-5">
-            <h4 class="text-bg-dark"><strong>Information</strong></h4>
-            <ul class="list-unstyled pt-2 ulistred texthover">
-              <li>Terms & Conditions</li>
-              <li>Privacy Policy</li>
-              <li>Code of Conduct</li>
-              <li>Staff Directory</li>
-              <li>Event Rules & Policies</li>
-              <li>Media and Promotion Pack</li>
-              <li>Contact</li>
-            </ul>
-          </div>
-          <div class="col-6 col-lg-2 mb-2 py-4">
-            <h4 class="text-bg-dark">Sport</h4>
-            <ul class="list-unstyled pt-2 ulistred texthover">
-              <li>Predator Footbal Boots</li>
-              <li>X Football Boots</li>
-              <li>Copa Football Boots</li>
-              <li>Manchester United</li>
-              <li>Juventus</li>
-              <li>Real Madrid</li>
-              <li>Arsenal</li>
-              <li>Bayern Munchen</li>
-              <li>Boost Shoes</li>
-              <li>Ultra Boost</li>
-            </ul>
-          </div>
-          <div class="col-6 col-lg-2 mb-2 py-4">
-            <h4 class="text-bg-dark">Collection</h4>
-            <ul class="list-unstyled pt-2 ulistred texthover">
-              <li>Stan Smith</li>
-              <li>Superstar</li>
-              <li>Ultrboost</li>
-              <li>NMD</li>
-              <li>Adidas Exlusive</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- section about2 end -->
-    <!-- end Footer1 -->
-    <section class="bg-dark text-light pt-3">
-      <div class="container">
-        <div class="row">
-          <div class="col-12 col-lg-12 col-md-6 d-flex">
-            <p>
-              <img
-                src="https://anifest.org/wp-content/uploads/2022/11/logo-no-year-white-neko.png"
-                alt=""
-                class="w-75"
-              />
-            </p>
-            <p class="privasykanan" style="max-width: 350px">
-              © Copyright 2022 AniFest Anime Festival. All images are used with
-              permission. All Rights Reserved. Website developed by AniFest.
-              Powered by Amazon Web Services.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- end footer1 end -->
+   <?php include('modular/footer.php') ?>
   </body>
   <script src="./css/js/function.js"></script>
   <script

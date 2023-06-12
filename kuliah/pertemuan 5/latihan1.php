@@ -6,6 +6,7 @@ $bulan = ['Januari', 'Februari', 'Maret'];
 $myArray = ['Sandhika', 39, false];
 $binatang = ['🐱', '🦁', '🐼', '🐬', '🐣'];
 
+
 // Mencetak array
 echo $hari[1];
 echo "<br>" ;

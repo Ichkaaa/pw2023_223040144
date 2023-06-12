@@ -1,3 +1,29 @@
+<?php
+session_start();
+require 'php/functions.php';
+
+// Memeriksa apakah ada data yang dikirim melalui formulir
+if (isset($_POST['submit'])) {
+    // Mendapatkan nilai email dari formulir
+    $email = $_POST['email'];
+
+    // Memanggil fungsi untuk menyimpan data pelanggan
+    saveCustomerData($email);
+}
+
+if (isset($_GET['cari'])) {
+    $keyword = $_GET['keyword'];
+    $merchandise = cariMerchandise($keyword);
+} else {
+    $merchandise = query("SELECT * FROM merchandise");
+}
+?>
+
+<!-- Rest of the HTML code -->
+
+<!-- Rest of the HTML code -->
+
+ 
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -35,7 +61,6 @@
       </div>
     </section>
     <!-- header hero -->
-    <!-- navbar -->
     <nav
       class="navbar navbar-expand-lg fixed-top navbar-light black"
       data-bs-theme="light"
@@ -62,7 +87,7 @@
         <div class="collapse navbar-collapse" id="navbarColor01">
           <ul class="navbar-nav ms-auto me-auto mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="index.html"
+              <a class="nav-link active" aria-current="page" href="index.php"
                 >Home</a
               >
             </li>
@@ -71,26 +96,34 @@
               <a class="nav-link" href="#inikatalog">Pricing</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="login.html">Login</a>
+            <?php
+          if (isset($_SESSION['submit'])) {
+            echo '<li class="nav-item"><a class="nav-link" href="./php/logout.php">Logout</a></li>';
+          } else {
+            echo '<li class="nav-item"><a class="nav-link" href="./php/login.php">Login</a></li>';
+          }
+        ?>
             </li>
           </ul>
-          <form class="d-flex" role="search">
+          <form action="<?php echo $_SERVER['PHP_SELF']; ?>#inikatalog" method="get" class="d-flex" role="search">
             <input
-              class="form-control me-2"
+              class="form-control me-2 keyword"
               type="search"
-              placeholder="Search"
               aria-label="Search"
+              name="keyword" 
+              placeholder="Cari disini.." data-role="input" autofocus
             />
-
-            <button class="btn btn-dark tombol1" type="submit">Search</button>
+            <button type="submit" id="submitsearch" name="cari" class="btn btn-dark tombol1 tombol-cari"><i class="fas fa-search"></i></button>
           </form>
         </div>
       </div>
     </nav>
+   
     <!-- navbar-end -->
-    <!-- schedules start -->
+
+       <!-- schedules start -->
     <section
-      class="pt-3"
+    class="pt-3"
       style="
         background: url(data:image/svg+xml;base64,PHN2ZyAgZmlsbD0icmdiYSgxNDcsMzcsNTQsMC4xMSkiIGhlaWdodD0iOTZweCIgd2lkdGg9Ijk2cHgiIHZpZXdCb3g9IjAgMCA5NiA5NiIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNNDgsMEE0OCw0OCwwLDAsMSw5Niw0OCw0OCw0OCwwLDAsMSw0OCwwWm0wLDBBNDgsNDgsMCwwLDAsMCw0OCw0OCw0OCwwLDAsMCw0OCwwWk05Niw0OEE0OCw0OCwwLDAsMCw0OCw5Niw0OCw0OCwwLDAsMCw5Niw0OFpNMCw0OEE0OCw0OCwwLDAsMCw0OCw5Niw0OCw0OCwwLDAsMCwwLDQ4WiIvPjwvc3ZnPg==);
       "
@@ -366,6 +399,8 @@
         </div>
       </div>
     </section>
+
+    
     <!-- schedules end -->
     <section>
       <div class="container-fluid">
@@ -416,45 +451,22 @@
               style="background-color: rgba(0, 0, 0, 0.324) !important"
               class="col-lg-6 col-sm-12 text-bg-dark"
             >
-              <h2 class="text-center pt-4">
-                BE THE FIRST TO GET ANIFEST DEALS!
-              </h2>
-              <p class="text-center">
-                Want to stay tuned with our adventures? Follow us on Instagram
-                or even better, sign up on our newsletter! We host prizes,
-                giveaways, cosplay showcases, and partner up with great
-                organizations that host fun events… and you’ll be the first to
-                be invited!
-              </p>
-              <p></p>
-              <form style="width: 400px; max-width: 500px">
-                <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label"
-                    >Email address</label
-                  >
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                  />
-                  <div id="emailHelp" class="form-text text-light">
-                    We'll never share your email with anyone else.
-                  </div>
-                </div>
-
-                <div class="mb-3 form-check">
-                  <input
-                    type="checkbox"
-                    class="form-check-input"
-                    id="exampleCheck1"
-                  />
-                  <label class="form-check-label" for="exampleCheck1"
-                    >Check me out</label
-                  >
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </form>
+            <h2 class="text-center pt-4">BE THE FIRST TO GET ANIFEST DEALS!</h2>
+<p class="text-center">Want to stay tuned with our adventures? Follow us on Instagram or even better, sign up on our newsletter! We host prizes, giveaways, cosplay showcases, and partner up with great organizations that host fun events… and you’ll be the first to be invited!</p>
+<form style="width: 400px; max-width: 500px" method="POST">
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp" required>
+        <div id="emailHelp" class="form-text text-light">
+            We'll never share your email with anyone else.
+        </div>
+    </div>
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    </div>
+    <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+</form>
 
               <p></p>
             </div>
@@ -482,27 +494,23 @@
             <h2 class="text-uppercase">Get your badge to anifest</h2>
           </div>
         </div>
-
         <div class="row">
+          <?php foreach ($merchandise as $star) : ?>
           <div class="col-lg-4 col-md-6 col-sm-12 mb-4 gambarnaek">
             <div class="card p-1" style="width: 20rem">
-              <img
-                src="https://cf.shopee.co.id/file/eb79b1a24d88b47d62fbdee2a83c4035"
-                alt=""
-                class="w-100"
-              />
+            <img src="assets/img/<?= $star['gambar']; ?>" alt="" class="w-100" />
               <div class="card-body">
-                <h4>
-                  Tokyo Revenger <br />
-                  <br />
-                  Kawaragi senju Distro
-                </h4>
+              <h4><?= $star['nama']; ?></h4>
+              <br>
+              <br>
+              <h4> <?= $star['deskripsi']; ?></h4>
+              
                 <p>3/03/2023</p>
                 <div class="card-fasilitas">
-                  <h4>$59.99</h4>
+                  <h4>RP.<?= $star['harga']; ?></h4>
 
                   <p>
-                    <a href="#Beli" type="button" class="btn btn-dark jajan">
+                    <a href="php/detail2.php?id=<?= $star['id']; ?>" type="button" class="btn btn-dark jajan">
                       Buy Here
                     </a>
                   </p>
@@ -510,146 +518,11 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-4 col-md-6 col-sm-12 mb-4 gambarnaek">
-            <div class="card p-1" style="width: 20rem">
-              <img
-                src="https://lzd-img-global.slatic.net/g/p/8376bf1a952c5db97d2f30a4aeb25eac.jpg_720x720q80.jpg_.webp"
-                alt=""
-                class="w-100"
-              />
-              <div class="card-body">
-                <h4>
-                  SNK <br />
-                  <br />
-                  DISTRO <br />
-                  <br />
-                </h4>
-                <p>27/07/2022</p>
-                <div class="card-fasilitas">
-                  <h4>$39.99</h4>
-                  <p>
-                    <a href="#Beli" type="button" class="btn btn-dark jajan">
-                      Buy Here
-                    </a>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-sm-12 mb-4 gambarnaek">
-            <div class="card p-1" style="width: 20rem">
-              <img
-                src="https://anifest.org/wp-content/uploads/2022/04/anifest-2022-running-kitsune-1.png?v=1667365476"
-                alt=""
-                class="w-100 h-20"
-              />
-              <div class="card-body">
-                <h4>Anifest neko tshirt</h4>
-                <p>20/02/2022</p>
-                <div class="card-fasilitas">
-                  <h4>$53.32</h4>
-                  <p>
-                    <a href="#Beli" type="button" class="btn btn-dark jajan">
-                      Buy Here
-                    </a>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-sm-12 mb-4 gambarnaek">
-            <div class="card p-1" style="width: 20rem">
-              <img
-                src="https://anifest.org/wp-content/uploads/2022/11/anifest-sponsor-bag-2023-400x400.png"
-                alt=""
-                class="w-100"
-              />
-              <div class="card-body">
-                <h4>Anifest Totebag</h4>
-                <p>20/02/2022</p>
-                <div class="card-fasilitas">
-                  <h4>$59.99</h4>
-                  <p>
-                    <a href="#Beli" type="button" class="btn btn-dark jajan">
-                      Buy Here
-                    </a>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-sm-12 mb-4 gambarnaek">
-            <div class="card p-1" style="width: 20rem">
-              <img
-                src="https://anifest.org/wp-content/uploads/2022/10/anifest-anifest-2023-cherry-blossom-kitsune-shirt-anifest-cherry-blossom-kitsune-render.png"
-                alt=""
-                class="w-100"
-              />
-              <div class="card-body">
-                <h4>
-                  Anifest <br />
-                  <br />
-                  Distro
-                </h4>
-                <p>18/11/2022</p>
-                <div class="card-fasilitas">
-                  <h4>$119.99</h4>
-                  <p>
-                    <a href="#Beli" type="button" class="btn btn-dark jajan">
-                      Buy Here
-                    </a>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <?php endforeach; ?>
         </div>
       </div>
     </section>
-    <section class="footerku bg-dark">
-      <div class="container">
-        <div class="row justify-content-between">
-          <div class="col-6 col-lg-2 mb-2 py-4 ms-5">
-            <h4 class="text-bg-dark"><strong>Information</strong></h4>
-            <ul class="list-unstyled pt-2 ulistred texthover">
-              <li>Terms & Conditions</li>
-              <li>Privacy Policy</li>
-              <li>Code of Conduct</li>
-              <li>Staff Directory</li>
-              <li>Event Rules & Policies</li>
-              <li>Media and Promotion Pack</li>
-              <li>Contact</li>
-            </ul>
-          </div>
-          <div class="col-6 col-lg-2 mb-2 py-4">
-            <h4 class="text-bg-dark">Sport</h4>
-            <ul class="list-unstyled pt-2 ulistred texthover">
-              <li>Predator Footbal Boots</li>
-              <li>X Football Boots</li>
-              <li>Copa Football Boots</li>
-              <li>Manchester United</li>
-              <li>Juventus</li>
-              <li>Real Madrid</li>
-              <li>Arsenal</li>
-              <li>Bayern Munchen</li>
-              <li>Boost Shoes</li>
-              <li>Ultra Boost</li>
-            </ul>
-          </div>
-          <div class="col-6 col-lg-2 mb-2 py-4">
-            <h4 class="text-bg-dark">Collection</h4>
-            <ul class="list-unstyled pt-2 ulistred texthover">
-              <li>Stan Smith</li>
-              <li>Superstar</li>
-              <li>Ultrboost</li>
-              <li>NMD</li>
-              <li>Adidas Exlusive</li>
-            </ul>
-          </div>
-          <hr style="width: 100; color: white" />
-        </div>
-      </div>
-    </section>
+
 
     <!-- section about2 end -->
     <!-- end Footer1 -->
@@ -676,6 +549,7 @@
     <!-- end footer1 end -->
   </body>
   <script src="./css/js/function.js"></script>
+ 
   <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
